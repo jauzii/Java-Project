@@ -1,0 +1,452 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content)">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:replace="${title}">Koleksi App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #0f0f0f;
+        --surface: #1a1a1a;
+        --surface2: #242424;
+        --border: #333;
+        --accent: #e63946;
+        --accent2: #f4a261;
+        --text: #e8e8e8;
+        --text2: #999;
+        --success: #2a9d8f;
+        --warning: #e9c46a;
+        --info: #457b9d;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Segoe UI", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* NAVBAR */
+      .navbar {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+      }
+      .navbar-brand .logo {
+        width: 36px;
+        height: 36px;
+        background: var(--accent);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+      }
+      .navbar-brand span {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .navbar-brand small {
+        display: block;
+        font-size: 0.7rem;
+        color: var(--text2);
+        font-weight: 400;
+      }
+      .navbar-nav {
+        display: flex;
+        gap: 0.25rem;
+      }
+      .navbar-nav a {
+        color: var(--text2);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+      .navbar-nav a:hover,
+      .navbar-nav a.active {
+        background: var(--surface2);
+        color: var(--text);
+      }
+      .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .logout-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text2);
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .logout-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* MAIN */
+      main {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1400px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .page-header {
+        margin-bottom: 2rem;
+      }
+      .page-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+      }
+      .page-header p {
+        color: var(--text2);
+        margin-top: 0.25rem;
+      }
+
+      /* CARDS */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+      }
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+      }
+      .stat-card.blue::before {
+        background: var(--info);
+      }
+      .stat-card.red::before {
+        background: var(--accent);
+      }
+      .stat-card.green::before {
+        background: var(--success);
+      }
+      .stat-card.orange::before {
+        background: var(--accent2);
+      }
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+      }
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+      .stat-icon {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 1.5rem;
+        opacity: 0.3;
+      }
+
+      /* TABLE */
+      .table-container {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .table-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .table-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        background: var(--surface2);
+        padding: 0.75rem 1rem;
+        text-align: left;
+        font-size: 0.8rem;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border);
+      }
+      tbody td {
+        padding: 0.875rem 1rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9rem;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: var(--surface2);
+      }
+
+      /* BADGES */
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .badge-blue {
+        background: rgba(69, 123, 157, 0.2);
+        color: #a8d4f5;
+      }
+      .badge-red {
+        background: rgba(230, 57, 70, 0.2);
+        color: #ff8a93;
+      }
+      .badge-green {
+        background: rgba(42, 157, 143, 0.2);
+        color: #7ed8d0;
+      }
+
+      /* BUTTONS */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+        border: none;
+        transition: all 0.2s;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #c1121f;
+      }
+      .btn-secondary {
+        background: var(--surface2);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .btn-secondary:hover {
+        border-color: var(--text2);
+      }
+      .btn-danger {
+        background: rgba(230, 57, 70, 0.15);
+        color: var(--accent);
+        border: 1px solid rgba(230, 57, 70, 0.3);
+      }
+      .btn-danger:hover {
+        background: rgba(230, 57, 70, 0.25);
+      }
+      .btn-sm {
+        padding: 0.3rem 0.75rem;
+        font-size: 0.8rem;
+      }
+
+      /* FORMS */
+      .form-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 600px;
+      }
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text2);
+        margin-bottom: 0.5rem;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.65rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: border-color 0.2s;
+        outline: none;
+      }
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: var(--accent);
+      }
+      .form-group select option {
+        background: var(--surface2);
+      }
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      /* SEARCH BAR */
+      .search-bar {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        align-items: center;
+      }
+      .search-bar input {
+        flex: 1;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.65rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        outline: none;
+      }
+      .search-bar input:focus {
+        border-color: var(--accent);
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 1rem 2rem;
+        text-align: center;
+        color: var(--text2);
+        font-size: 0.8rem;
+      }
+
+      /* ALERT */
+      .alert {
+        padding: 0.875rem 1.25rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+      }
+      .alert-success {
+        background: rgba(42, 157, 143, 0.15);
+        border: 1px solid rgba(42, 157, 143, 0.3);
+        color: #7ed8d0;
+      }
+      .alert-error {
+        background: rgba(230, 57, 70, 0.15);
+        border: 1px solid rgba(230, 57, 70, 0.3);
+        color: #ff8a93;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .stat-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .navbar-nav {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="navbar-brand" th:href="@{/dashboard}">
+        <div class="logo">🤖</div>
+        <div>
+          <span>Figure Collector</span>
+          <small>Koleksi Action Figure & Gundam</small>
+        </div>
+      </a>
+      <div class="navbar-nav">
+        <a
+          th:href="@{/dashboard}"
+          th:classappend="${activePage == 'dashboard'} ? 'active'"
+          >📊 Dashboard</a
+        >
+        <a
+          th:href="@{/koleksi}"
+          th:classappend="${activePage == 'koleksi'} ? 'active'"
+          >📦 Kelola Koleksi</a
+        >
+        <a
+          th:href="@{/kategori}"
+          th:classappend="${activePage == 'kategori'} ? 'active'"
+          >🏷️ Kategori</a
+        >
+        <a
+          th:href="@{/laporan}"
+          th:classappend="${activePage == 'laporan'} ? 'active'"
+          >📈 Laporan</a
+        >
+        <a
+          th:href="@{/profile}"
+          th:classappend="${activePage == 'profile'} ? 'active'"
+          >👤 Profile</a
+        >
+      </div>
+      <div class="navbar-right">
+        <a th:href="@{/logout}" class="logout-btn">Logout</a>
+      </div>
+    </nav>
+
+    <main th:replace="${content}">
+      <!-- content goes here -->
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Figure Collector — Koleksi Action Figure & Gundam</p>
+    </footer>
+  </body>
+</html>

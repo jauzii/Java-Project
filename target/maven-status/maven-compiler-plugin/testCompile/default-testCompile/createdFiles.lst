@@ -1,0 +1,13 @@
+com\example\koleksi\controller\AuthControllerTest.class
+com\example\koleksi\model\KategoriTest.class
+com\example\koleksi\service\impl\KoleksiServiceImplTest.class
+com\example\koleksi\controller\LaporanControllerTest.class
+com\example\koleksi\config\DataInitializerTest.class
+com\example\koleksi\config\SecurityConfigTest.class
+com\example\koleksi\controller\DashboardControllerTest.class
+com\example\koleksi\controller\KoleksiControllerTest.class
+com\example\koleksi\KoleksiAppApplicationTest.class
+com\example\koleksi\model\UserTest.class
+com\example\koleksi\controller\KategoriControllerTest.class
+com\example\koleksi\model\KoleksiTest.class
+com\example\koleksi\service\UserServiceTest.class

@@ -1,0 +1,74 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout :: layout(~{::title}, ~{::main})}"
+>
+  <head>
+    <title>Kategori — Figure Collector</title>
+  </head>
+  <body>
+    <main>
+      <div
+        class="page-header"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div>
+          <h1>🏷️ Kategori</h1>
+          <p>Kelola kategori koleksi action figure & gundam</p>
+        </div>
+        <a th:href="@{/kategori/add}" class="btn btn-primary"
+          >+ Tambah Kategori</a
+        >
+      </div>
+
+      <div class="table-container">
+        <div class="table-header"><h3>Daftar Kategori</h3></div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nama Kategori</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="c, stat : ${categories}">
+              <td style="color: var(--text2)" th:text="${stat.count}">1</td>
+              <td style="font-weight: 500" th:text="${c.namaKategori}">-</td>
+              <td>
+                <div style="display: flex; gap: 0.5rem">
+                  <a
+                    th:href="@{'/kategori/edit/' + ${c.idKategori}}"
+                    class="btn btn-secondary btn-sm"
+                    >✏️ Edit</a
+                  >
+                  <a
+                    th:href="@{'/kategori/delete/' + ${c.idKategori}}"
+                    onclick="return confirm('Hapus kategori ini?');"
+                    class="btn btn-danger btn-sm"
+                    >🗑️ Hapus</a
+                  >
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(categories)}">
+              <td
+                colspan="3"
+                style="text-align: center; color: var(--text2); padding: 3rem"
+              >
+                Belum ada kategori.
+                <a th:href="@{/kategori/add}" style="color: var(--accent)"
+                  >Tambah sekarang →</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

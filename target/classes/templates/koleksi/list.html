@@ -1,0 +1,170 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout :: layout(~{::title}, ~{::main})}"
+>
+  <head>
+    <title>Kelola Koleksi — Figure Collector</title>
+  </head>
+  <body>
+    <main>
+      <div
+        class="page-header"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div>
+          <h1>📦 Kelola Koleksi</h1>
+          <p>Tambah, edit, dan kelola koleksi action figure & gundam kamu</p>
+        </div>
+        <a th:href="@{/koleksi/add}" class="btn btn-primary"
+          >+ Tambah Koleksi</a
+        >
+      </div>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="🔍 Cari nama barang..."
+          onkeyup="filterTable()"
+        />
+        <select
+          id="filterStatus"
+          onchange="filterTable()"
+          style="
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+          "
+        >
+          <option value="">Semua Status</option>
+          <option value="Dikoleksi">Dikoleksi</option>
+          <option value="Dijual">Dijual</option>
+          <option value="Terjual">Terjual</option>
+        </select>
+      </div>
+
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Daftar Koleksi</h3>
+          <span
+            style="color: var(--text2); font-size: 0.85rem"
+            id="itemCount"
+          ></span>
+        </div>
+        <table id="koleksiTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nama Barang</th>
+              <th>Kategori</th>
+              <th>Harga Beli</th>
+              <th>Harga Jual</th>
+              <th>Kondisi</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="item, stat : ${items}">
+              <td style="color: var(--text2)" th:text="${stat.count}">1</td>
+              <td style="font-weight: 500" th:text="${item.namaBarang}">-</td>
+              <td
+                style="color: var(--text2)"
+                th:text="${item.kategori != null ? item.kategori.namaKategori : '-'}"
+              >
+                -
+              </td>
+              <td>
+                Rp
+                <span
+                  th:text="${#numbers.formatInteger(item.hargaBeli, 0, 'COMMA')}"
+                  >0</span
+                >
+              </td>
+              <td th:if="${item.hargaJual != null}">
+                Rp
+                <span
+                  th:text="${#numbers.formatInteger(item.hargaJual, 0, 'COMMA')}"
+                  >0</span
+                >
+              </td>
+              <td th:if="${item.hargaJual == null}" style="color: var(--text2)">
+                -
+              </td>
+              <td style="color: var(--text2)" th:text="${item.kondisi}">-</td>
+              <td>
+                <span
+                  class="badge"
+                  th:classappend="${item.statusBarang == 'Dikoleksi'} ? 'badge-blue' : (${item.statusBarang == 'Dijual'} ? 'badge-red' : 'badge-green')"
+                  th:text="${item.statusBarang}"
+                  >-</span
+                >
+              </td>
+              <td>
+                <div style="display: flex; gap: 0.5rem">
+                  <a
+                    th:href="@{'/koleksi/edit/' + ${item.idKoleksi}}"
+                    class="btn btn-secondary btn-sm"
+                    >✏️ Edit</a
+                  >
+                  <a
+                    th:href="@{'/koleksi/delete/' + ${item.idKoleksi}}"
+                    onclick="return confirm('Yakin hapus item ini?');"
+                    class="btn btn-danger btn-sm"
+                    >🗑️ Hapus</a
+                  >
+                </div>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(items)}">
+              <td
+                colspan="8"
+                style="text-align: center; color: var(--text2); padding: 3rem"
+              >
+                Belum ada koleksi.
+                <a th:href="@{/koleksi/add}" style="color: var(--accent)"
+                  >Tambah sekarang →</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <script>
+        function filterTable() {
+          const search = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+          const status = document
+            .getElementById("filterStatus")
+            .value.toLowerCase();
+          const rows = document.querySelectorAll("#koleksiTable tbody tr");
+          let count = 0;
+          rows.forEach((row) => {
+            const name = row.cells[1]?.textContent.toLowerCase() || "";
+            const rowStatus =
+              row.cells[6]?.textContent.trim().toLowerCase() || "";
+            const matchName = name.includes(search);
+            const matchStatus = !status || rowStatus === status.toLowerCase();
+            if (matchName && matchStatus) {
+              row.style.display = "";
+              count++;
+            } else row.style.display = "none";
+          });
+          document.getElementById("itemCount").textContent = count + " item";
+        }
+        filterTable();
+      </script>
+    </main>
+  </body>
+</html>

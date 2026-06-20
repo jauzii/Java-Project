@@ -1,0 +1,12 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+  <body>
+    <section>
+      <h2>Kategori</h2>
+      <a th:href="@{/kategori/add}">Tambah Kategori</a>
+      <ul>
+        <li th:each="c : ${categories}" th:text="${c.namaKategori}"></li>
+      </ul>
+    </section>
+  </body>
+</html>

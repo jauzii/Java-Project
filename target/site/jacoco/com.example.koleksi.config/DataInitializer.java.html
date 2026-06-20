@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataInitializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">koleksi-app</a> &gt; <a href="index.source.html" class="el_package">com.example.koleksi.config</a> &gt; <span class="el_source">DataInitializer.java</span></div><h1>DataInitializer.java</h1><pre class="source lang-java linenums">package com.example.koleksi.config;
+
+import com.example.koleksi.model.User;
+import com.example.koleksi.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DataInitializer implements CommandLineRunner {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+<span class="fc" id="L15">    public DataInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {</span>
+<span class="fc" id="L16">        this.userRepository = userRepository;</span>
+<span class="fc" id="L17">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L18">    }</span>
+
+    @Override
+    public void run(String... args) throws Exception {
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        if (!userRepository.findByUsername(&quot;admin&quot;).isPresent()) {</span>
+<span class="fc" id="L23">            User admin = new User();</span>
+<span class="fc" id="L24">            admin.setUsername(&quot;admin&quot;);</span>
+<span class="fc" id="L25">            admin.setPassword(passwordEncoder.encode(&quot;adminpass&quot;));</span>
+<span class="fc" id="L26">            userRepository.save(admin);</span>
+        }
+<span class="fc" id="L28">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

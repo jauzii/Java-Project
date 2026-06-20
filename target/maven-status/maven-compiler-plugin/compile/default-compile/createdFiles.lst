@@ -1,0 +1,17 @@
+com\example\koleksi\config\DataInitializer.class
+com\example\koleksi\model\Kategori.class
+com\example\koleksi\repository\KategoriRepository.class
+com\example\koleksi\service\impl\KoleksiServiceImpl.class
+com\example\koleksi\controller\DashboardController.class
+com\example\koleksi\model\Koleksi.class
+com\example\koleksi\service\KoleksiService.class
+com\example\koleksi\controller\KoleksiController.class
+com\example\koleksi\repository\KoleksiRepository.class
+com\example\koleksi\config\SecurityConfig.class
+com\example\koleksi\service\UserService.class
+com\example\koleksi\controller\KategoriController.class
+com\example\koleksi\controller\LaporanController.class
+com\example\koleksi\repository\UserRepository.class
+com\example\koleksi\model\User.class
+com\example\koleksi\KoleksiAppApplication.class
+com\example\koleksi\controller\AuthController.class

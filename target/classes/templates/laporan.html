@@ -1,0 +1,126 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout :: layout(~{::title}, ~{::main})}"
+>
+  <head>
+    <title>Laporan Penjualan — Figure Collector</title>
+  </head>
+  <body>
+    <main>
+      <div class="page-header">
+        <h1>📈 Laporan Penjualan</h1>
+        <p>Ringkasan transaksi penjualan koleksi kamu</p>
+      </div>
+
+      <div
+        class="stat-grid"
+        style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem"
+      >
+        <div class="stat-card green">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Total Terjual</div>
+          <div class="stat-value" th:text="${#lists.size(terjual)}">0</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Total Keuntungan</div>
+          <div class="stat-value" style="font-size: 1.3rem">
+            Rp
+            <span
+              th:text="${#numbers.formatInteger(totalKeuntungan, 0, 'COMMA')}"
+              >0</span
+            >
+          </div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">📊</div>
+          <div class="stat-label">Rata-rata Keuntungan</div>
+          <div class="stat-value" style="font-size: 1.3rem">
+            Rp
+            <span
+              th:text="${#lists.size(terjual) > 0 ? #numbers.formatInteger(totalKeuntungan / #lists.size(terjual), 0, 'COMMA') : 0}"
+              >0</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <div class="table-header"><h3>Detail Penjualan</h3></div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nama Barang</th>
+              <th>Harga Beli</th>
+              <th>Harga Jual</th>
+              <th>Keuntungan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="k, stat : ${terjual}">
+              <td style="color: var(--text2)" th:text="${stat.count}">1</td>
+              <td style="font-weight: 500" th:text="${k.namaBarang}">-</td>
+              <td>
+                Rp
+                <span
+                  th:text="${#numbers.formatInteger(k.hargaBeli, 0, 'COMMA')}"
+                  >0</span
+                >
+              </td>
+              <td>
+                Rp
+                <span
+                  th:text="${#numbers.formatInteger(k.hargaJual, 0, 'COMMA')}"
+                  >0</span
+                >
+              </td>
+              <td>
+                <span style="color: var(--success); font-weight: 600">
+                  Rp
+                  <span
+                    th:text="${#numbers.formatInteger(k.hargaJual - k.hargaBeli, 0, 'COMMA')}"
+                    >0</span
+                  >
+                </span>
+              </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(terjual)}">
+              <td
+                colspan="5"
+                style="text-align: center; color: var(--text2); padding: 3rem"
+              >
+                Belum ada barang terjual.
+              </td>
+            </tr>
+          </tbody>
+          <tfoot th:if="${!#lists.isEmpty(terjual)}">
+            <tr style="background: var(--surface2)">
+              <td
+                colspan="4"
+                style="padding: 1rem; font-weight: 600; text-align: right"
+              >
+                Total Keuntungan:
+              </td>
+              <td
+                style="
+                  padding: 1rem;
+                  color: var(--success);
+                  font-weight: 700;
+                  font-size: 1.1rem;
+                "
+              >
+                Rp
+                <span
+                  th:text="${#numbers.formatInteger(totalKeuntungan, 0, 'COMMA')}"
+                  >0</span
+                >
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>

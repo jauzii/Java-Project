@@ -1,0 +1,206 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Figure Collector</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #0f0f0f;
+        color: #e8e8e8;
+        font-family: "Segoe UI", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .login-wrapper {
+        display: flex;
+        width: 900px;
+        min-height: 500px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #333;
+      }
+      .login-left {
+        flex: 1;
+        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-right: 1px solid #333;
+      }
+      .brand-logo {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      .brand-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+      .brand-subtitle {
+        color: #999;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+      .features {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #aaa;
+        font-size: 0.85rem;
+      }
+      .login-right {
+        flex: 1;
+        background: #1a1a1a;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .login-right h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .login-right p {
+        color: #999;
+        font-size: 0.875rem;
+        margin-bottom: 2rem;
+      }
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        color: #999;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .form-group input {
+        width: 100%;
+        background: #242424;
+        border: 1px solid #333;
+        color: #e8e8e8;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .form-group input:focus {
+        border-color: #e63946;
+      }
+      .btn-login {
+        width: 100%;
+        background: #e63946;
+        color: white;
+        border: none;
+        padding: 0.875rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 0.5rem;
+      }
+      .btn-login:hover {
+        background: #c1121f;
+      }
+      .alert-error {
+        background: rgba(230, 57, 70, 0.15);
+        border: 1px solid rgba(230, 57, 70, 0.3);
+        color: #ff8a93;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        margin-bottom: 1.25rem;
+      }
+      .alert-success {
+        background: rgba(42, 157, 143, 0.15);
+        border: 1px solid rgba(42, 157, 143, 0.3);
+        color: #7ed8d0;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        margin-bottom: 1.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <div class="login-left">
+        <div class="brand-logo">&#x1F916;</div>
+        <div class="brand-title">Figure Collector</div>
+        <div class="brand-subtitle">
+          Sistem Informasi Koleksi Action Figure &amp; Gundam. Kelola koleksi
+          kamu dengan mudah.
+        </div>
+        <div class="features">
+          <div class="feature-item">
+            <span>&#x1F4E6;</span
+            ><span>Kelola koleksi action figure &amp; gundam</span>
+          </div>
+          <div class="feature-item">
+            <span>&#x1F4CA;</span><span>Dashboard statistik koleksi</span>
+          </div>
+          <div class="feature-item">
+            <span>&#x1F4B0;</span
+            ><span>Laporan penjualan &amp; keuntungan</span>
+          </div>
+          <div class="feature-item">
+            <span>&#x1F3F7;&#xFE0F;</span
+            ><span>Manajemen kategori koleksi</span>
+          </div>
+        </div>
+      </div>
+      <div class="login-right">
+        <h2>Selamat Datang &#x1F44B;</h2>
+        <p>Masuk ke akun kamu untuk mulai mengelola koleksi</p>
+        <div class="alert-error" th:if="${param.error}">
+          Username atau password salah. Coba lagi.
+        </div>
+        <div class="alert-success" th:if="${param.logout}">
+          Berhasil logout.
+        </div>
+        <form method="post" th:action="@{/login}">
+          <div class="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Masukkan username"
+              required
+              autofocus
+            />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Masukkan password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-login">LOGIN</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

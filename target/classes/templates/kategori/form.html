@@ -1,0 +1,17 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: body">
+  <body>
+    <section>
+      <h2>Tambah Kategori</h2>
+      <form th:action="@{/kategori/save}" th:object="${kategori}" method="post">
+        <div>
+          <label>Nama Kategori</label>
+          <input type="text" th:field="*{namaKategori}" required />
+        </div>
+        <div>
+          <button type="submit">Simpan</button>
+        </div>
+      </form>
+    </section>
+  </body>
+</html>
