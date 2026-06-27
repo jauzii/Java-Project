@@ -2,6 +2,7 @@ D:\UAS-Algoritma\src\main\java\com\example\koleksi\KoleksiAppApplication.java
 D:\UAS-Algoritma\src\main\java\com\example\koleksi\repository\KategoriRepository.java
 D:\UAS-Algoritma\src\main\java\com\example\koleksi\service\KoleksiService.java
 D:\UAS-Algoritma\src\main\java\com\example\koleksi\config\SecurityConfig.java
+D:\UAS-Algoritma\src\main\java\com\example\koleksi\controller\ProfileController.java
 D:\UAS-Algoritma\src\main\java\com\example\koleksi\model\Koleksi.java
 D:\UAS-Algoritma\src\main\java\com\example\koleksi\controller\DashboardController.java
 D:\UAS-Algoritma\src\main\java\com\example\koleksi\controller\KoleksiController.java

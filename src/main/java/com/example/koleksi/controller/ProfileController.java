@@ -1,4 +1,4 @@
-﻿package com.example.koleksi.controller;
+package com.example.koleksi.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
