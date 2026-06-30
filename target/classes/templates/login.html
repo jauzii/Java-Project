@@ -220,7 +220,7 @@
       .input-wrap {
         position: relative;
       }
-      .input-wrap i {
+      .input-wrap > i {
         position: absolute;
         left: 14px;
         top: 50%;
@@ -235,7 +235,7 @@
         background: var(--surface3);
         border: 1px solid var(--border);
         color: var(--text-primary);
-        padding: 12px 14px 12px 42px;
+        padding: 12px 42px 12px 42px;
         border-radius: var(--r-sm);
         font-size: 13.5px;
         font-family: inherit;
@@ -257,7 +257,7 @@
         background: var(--surface2);
       }
       .form-group input:focus + i,
-      .input-wrap:focus-within i {
+      .input-wrap:focus-within > i {
         color: var(--accent);
       }
 
@@ -434,18 +434,7 @@
               />
               <i class="ti ti-lock"></i>
 
-              <span
-                id="togglePassword"
-                style="
-                  position: absolute;
-                  right: 14px;
-                  top: 50%;
-                  transform: translateY(-50%);
-                  cursor: pointer;
-                  color: #888;
-                  font-size: 18px;
-                "
-              >
+              <span id="togglePassword" class="toggle-password">
                 <i class="ti ti-eye"></i>
               </span>
             </div>
@@ -456,24 +445,20 @@
         </form>
       </div>
     </div>
-    </div>
 
-<script>
-const password = document.getElementById("password");
-const togglePassword = document.getElementById("togglePassword");
+    <script>
+      const password = document.getElementById("password");
+      const togglePassword = document.getElementById("togglePassword");
 
-togglePassword.addEventListener("click", function () {
-    if (password.type === "password") {
-        password.type = "text";
-        this.innerHTML = '<i class="ti ti-eye-off"></i>';
-    } else {
-        password.type = "password";
-        this.innerHTML = '<i class="ti ti-eye"></i>';
-    }
-});
-</script>
-
-  </body>
-</html>
+      togglePassword.addEventListener("click", function () {
+        if (password.type === "password") {
+          password.type = "text";
+          this.innerHTML = '<i class="ti ti-eye-off"></i>';
+        } else {
+          password.type = "password";
+          this.innerHTML = '<i class="ti ti-eye"></i>';
+        }
+      });
+    </script>
   </body>
 </html>
