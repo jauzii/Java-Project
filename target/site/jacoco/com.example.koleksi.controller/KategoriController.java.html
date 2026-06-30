@@ -8,30 +8,32 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(&quot;/kategori&quot;)
+@SuppressWarnings(&quot;null&quot;)
 public class KategoriController {
 
     private final KategoriRepository kategoriRepository;
 
-<span class="fc" id="L15">    public KategoriController(KategoriRepository kategoriRepository) {</span>
-<span class="fc" id="L16">        this.kategoriRepository = kategoriRepository;</span>
-<span class="fc" id="L17">    }</span>
+<span class="fc" id="L16">    public KategoriController(KategoriRepository kategoriRepository) {</span>
+<span class="fc" id="L17">        this.kategoriRepository = kategoriRepository;</span>
+<span class="fc" id="L18">    }</span>
 
     @GetMapping
     public String list(Model model) {
-<span class="fc" id="L21">        model.addAttribute(&quot;categories&quot;, kategoriRepository.findAll());</span>
-<span class="fc" id="L22">        return &quot;kategori/list&quot;;</span>
+<span class="fc" id="L22">        model.addAttribute(&quot;categories&quot;, kategoriRepository.findAll());</span>
+<span class="fc" id="L23">        model.addAttribute(&quot;activePage&quot;, &quot;kategori&quot;);</span>
+<span class="fc" id="L24">        return &quot;kategori/list&quot;;</span>
     }
 
     @GetMapping(&quot;/add&quot;)
     public String addForm(Model model) {
-<span class="fc" id="L27">        model.addAttribute(&quot;kategori&quot;, new Kategori());</span>
-<span class="fc" id="L28">        return &quot;kategori/form&quot;;</span>
+<span class="fc" id="L29">        model.addAttribute(&quot;kategori&quot;, new Kategori());</span>
+<span class="fc" id="L30">        return &quot;kategori/form&quot;;</span>
     }
 
     @PostMapping(&quot;/save&quot;)
     public String save(@ModelAttribute Kategori kategori) {
-<span class="fc" id="L33">        kategoriRepository.save(kategori);</span>
-<span class="fc" id="L34">        return &quot;redirect:/kategori&quot;;</span>
+<span class="fc" id="L35">        kategoriRepository.save(kategori);</span>
+<span class="fc" id="L36">        return &quot;redirect:/kategori&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

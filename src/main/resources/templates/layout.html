@@ -1,5 +1,9 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content)">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+  th:fragment="layout(title, content)"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -188,6 +192,16 @@
       .logout-btn:hover {
         border-color: var(--border-hover);
         color: var(--text-primary);
+      }
+      .login-btn {
+        background: var(--blue-bg);
+        color: var(--blue);
+        border-color: var(--blue-border);
+      }
+      .login-btn:hover {
+        background: rgba(79, 142, 247, 0.18);
+        border-color: var(--blue-border);
+        color: var(--blue);
       }
       .logout-btn i {
         font-size: 14px;
@@ -716,7 +730,7 @@
         </div>
       </a>
 
-      <div class="navbar-nav">
+      <div class="navbar-nav" sec:authorize="isFullyAuthenticated()">
         <a
           th:href="@{/dashboard}"
           th:classappend="${activePage == 'dashboard'}  ? ' active' : ''"
@@ -750,8 +764,21 @@
       </div>
 
       <div class="navbar-right">
-        <a th:href="@{/logout}" class="logout-btn">
+        <!-- Sudah login -> tombol Logout -->
+        <a
+          sec:authorize="isFullyAuthenticated()"
+          th:href="@{/logout}"
+          class="logout-btn"
+        >
           <i class="ti ti-logout"></i> Logout
+        </a>
+        <!-- Belum login -> tombol Login -->
+        <a
+          sec:authorize="isAnonymous()"
+          th:href="@{/login}"
+          class="logout-btn login-btn"
+        >
+          <i class="ti ti-login"></i> Login
         </a>
       </div>
     </nav>

@@ -17,51 +17,110 @@
         "
       >
         <div>
-          <h1
-            th:text="${koleksi.idKoleksi == null} ? '➕ Tambah Koleksi' : '✏️ Edit Koleksi'"
-          >
-            Form Koleksi
+          <h1 style="display: flex; align-items: center; gap: 8px">
+            <i
+              th:class="${koleksi.idKoleksi == null} ? 'ti ti-plus' : 'ti ti-edit'"
+            ></i>
+            <span
+              th:text="${koleksi.idKoleksi == null} ? 'Tambah Koleksi' : 'Edit Koleksi'"
+              >Form Koleksi</span
+            >
           </h1>
           <p>Isi data koleksi action figure atau gundam kamu</p>
         </div>
-        <a th:href="@{/koleksi}" class="btn btn-secondary">← Kembali</a>
+        <a th:href="@{/koleksi}" class="btn btn-secondary">
+          <i class="ti ti-arrow-left"></i> Kembali
+        </a>
       </div>
 
-      <div class="form-card">
-        <form th:action="@{/koleksi/save}" th:object="${koleksi}" method="post">
-          <input type="hidden" th:field="*{idKoleksi}" />
+      <form th:action="@{/koleksi/save}" th:object="${koleksi}" method="post">
+        <input type="hidden" th:field="*{idKoleksi}" />
+
+        <div class="form-card">
+          <!-- Nama Barang -->
           <div class="form-group">
-            <label>Nama Barang</label>
+            <label
+              ><i
+                class="ti ti-tag"
+                style="margin-right: 4px; font-size: 12px"
+              ></i>
+              Nama Barang</label
+            >
             <input
               type="text"
               th:field="*{namaBarang}"
-              placeholder="Contoh: RX-78-2 Gundam MG"
+              placeholder="Masukan Nama Barang"
               required
             />
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+
+          <!-- Harga -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
             <div class="form-group">
-              <label>Harga Beli (Rp)</label>
+              <label
+                ><i
+                  class="ti ti-coin"
+                  style="margin-right: 4px; font-size: 12px"
+                ></i>
+                Harga Beli (Rp)</label
+              >
               <input
                 type="number"
+                id="hargaBeli"
                 th:field="*{hargaBeli}"
                 placeholder="0"
                 min="0"
+                oninput="updateProfit()"
               />
             </div>
             <div class="form-group">
-              <label>Harga Jual (Rp)</label>
+              <label
+                ><i
+                  class="ti ti-cash"
+                  style="margin-right: 4px; font-size: 12px"
+                ></i>
+                Harga Jual (Rp)</label
+              >
               <input
                 type="number"
+                id="hargaJual"
                 th:field="*{hargaJual}"
-                placeholder="0 (opsional)"
+                placeholder="(opsional)"
                 min="0"
+                oninput="updateProfit()"
               />
             </div>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+
+          <!-- Live profit preview -->
+          <div
+            id="profitPreview"
+            style="
+              display: none;
+              align-items: center;
+              gap: 8px;
+              padding: 10px 14px;
+              border-radius: 8px;
+              margin-bottom: 16px;
+              font-size: 13px;
+            "
+          >
+            <i class="ti ti-trending-up"></i>
+            <span
+              >Estimasi keuntungan: <strong id="profitValue">Rp 0</strong></span
+            >
+          </div>
+
+          <!-- Kondisi + Status -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
             <div class="form-group">
-              <label>Kondisi</label>
+              <label
+                ><i
+                  class="ti ti-sparkles"
+                  style="margin-right: 4px; font-size: 12px"
+                ></i>
+                Kondisi</label
+              >
               <select th:field="*{kondisi}">
                 <option value="">-- Pilih Kondisi --</option>
                 <option value="Baru">Baru</option>
@@ -71,7 +130,13 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Status</label>
+              <label
+                ><i
+                  class="ti ti-list-check"
+                  style="margin-right: 4px; font-size: 12px"
+                ></i>
+                Status</label
+              >
               <select th:field="*{statusBarang}">
                 <option value="Dikoleksi">Dikoleksi</option>
                 <option value="Dijual">Dijual</option>
@@ -79,8 +144,16 @@
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <label>Kategori</label>
+
+          <!-- Kategori -->
+          <div class="form-group" style="margin-bottom: 0">
+            <label
+              ><i
+                class="ti ti-category"
+                style="margin-right: 4px; font-size: 12px"
+              ></i>
+              Kategori</label
+            >
             <select th:field="*{kategori.idKategori}">
               <option value="">-- Pilih Kategori --</option>
               <option
@@ -90,12 +163,46 @@
               ></option>
             </select>
           </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">💾 Simpan</button>
-            <a th:href="@{/koleksi}" class="btn btn-secondary">Batal</a>
-          </div>
-        </form>
-      </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="ti ti-device-floppy"></i> Simpan
+          </button>
+          <a th:href="@{/koleksi}" class="btn btn-secondary">Batal</a>
+        </div>
+      </form>
+
+      <script>
+        function updateProfit() {
+          const beli =
+            parseFloat(document.getElementById("hargaBeli").value) || 0;
+          const jual =
+            parseFloat(document.getElementById("hargaJual").value) || 0;
+          const preview = document.getElementById("profitPreview");
+          const valueEl = document.getElementById("profitValue");
+
+          if (jual > 0 && beli > 0) {
+            const profit = jual - beli;
+            const formatted = "Rp " + Math.abs(profit).toLocaleString("id-ID");
+            preview.style.display = "flex";
+            if (profit >= 0) {
+              preview.style.background = "var(--green-bg)";
+              preview.style.color = "var(--green)";
+              preview.style.border = "1px solid var(--green-border)";
+              valueEl.textContent = formatted + " untung";
+            } else {
+              preview.style.background = "var(--red-bg)";
+              preview.style.color = "var(--red)";
+              preview.style.border = "1px solid var(--red-border)";
+              valueEl.textContent = formatted + " rugi";
+            }
+          } else {
+            preview.style.display = "none";
+          }
+        }
+        updateProfit();
+      </script>
     </main>
   </body>
 </html>

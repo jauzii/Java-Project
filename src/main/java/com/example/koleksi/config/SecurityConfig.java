@@ -35,7 +35,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/logout", "/css/**", "/js/**", "/images/**", "/").permitAll()
+                        // "/" SENGAJA TIDAK di-permitAll karena route ini
+                        // di-mapping ke DashboardController -> render dashboard.
+                        // Kalau di-permitAll, orang yang belum login bisa langsung
+                        // lihat dashboard tanpa diarahkan ke /login.
+                        .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

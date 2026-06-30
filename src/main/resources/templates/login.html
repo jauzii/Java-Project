@@ -4,141 +4,363 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Figure Collector</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+    />
+
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
+
+      :root {
+        --bg: #0f0f11;
+        --surface: #1a1a1f;
+        --surface2: #222228;
+        --surface3: #2a2a32;
+        --border: rgba(255, 255, 255, 0.08);
+        --border-hover: rgba(255, 255, 255, 0.14);
+        --text-primary: #f0f0f2;
+        --text-secondary: #8b8b99;
+        --text-muted: #55555f;
+        --accent: #f7604a;
+        --accent-hover: #e2503c;
+        --accent-bg: rgba(247, 96, 74, 0.1);
+        --accent-border: rgba(247, 96, 74, 0.25);
+        --green: #52d68a;
+        --green-bg: rgba(82, 214, 138, 0.12);
+        --green-border: rgba(82, 214, 138, 0.28);
+        --red: #f76f72;
+        --red-bg: rgba(247, 111, 114, 0.12);
+        --red-border: rgba(247, 111, 114, 0.28);
+        --r: 16px;
+        --r-sm: 10px;
+      }
+
+      html,
       body {
-        background: #0f0f0f;
-        color: #e8e8e8;
-        font-family: "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", system-ui, sans-serif;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
+        -webkit-font-smoothing: antialiased;
+        padding: 24px;
       }
+
+      /* subtle ambient glow background */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 700px;
+        height: 700px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+          circle,
+          rgba(247, 96, 74, 0.07) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
       .login-wrapper {
         display: flex;
-        width: 900px;
-        min-height: 500px;
-        border-radius: 16px;
+        width: 100%;
+        max-width: 920px;
+        min-height: 520px;
+        border-radius: var(--r);
         overflow: hidden;
-        border: 1px solid #333;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.55);
+        position: relative;
+        z-index: 1;
       }
+
+      /* ── LEFT PANEL ── */
       .login-left {
         flex: 1;
-        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-        padding: 3rem;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(247, 96, 74, 0.08) 0%,
+            transparent 50%
+          ),
+          linear-gradient(135deg, #1c1c22 0%, #131316 100%);
+        padding: 48px 44px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        border-right: 1px solid #333;
+        border-right: 1px solid var(--border);
       }
       .brand-logo {
-        font-size: 3rem;
-        margin-bottom: 1rem;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #e85d8a 0%, #f7604a 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 24px -6px rgba(247, 96, 74, 0.4);
       }
       .brand-title {
-        font-size: 1.75rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 10px;
       }
       .brand-subtitle {
-        color: #999;
-        font-size: 0.9rem;
-        line-height: 1.6;
-        margin-bottom: 2rem;
+        color: var(--text-secondary);
+        font-size: 13.5px;
+        line-height: 1.65;
+        margin-bottom: 32px;
+        max-width: 320px;
       }
       .features {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 4px;
       }
       .feature-item {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        color: #aaa;
-        font-size: 0.85rem;
+        gap: 12px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        padding: 9px 10px;
+        border-radius: var(--r-sm);
+        transition: background 0.15s;
       }
+      .feature-item:hover {
+        background: var(--surface2);
+        color: var(--text-primary);
+      }
+      .feature-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: var(--surface3);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .feature-icon.fi-box {
+        color: #4f8ef7;
+      }
+      .feature-icon.fi-chart {
+        color: #52d68a;
+      }
+      .feature-icon.fi-coin {
+        color: #f9b64e;
+      }
+      .feature-icon.fi-tag {
+        color: #e85d8a;
+      }
+
+      /* ── RIGHT PANEL ── */
       .login-right {
         flex: 1;
-        background: #1a1a1a;
-        padding: 3rem;
+        background: var(--surface);
+        padding: 48px 44px;
         display: flex;
         flex-direction: column;
         justify-content: center;
       }
       .login-right h2 {
-        font-size: 1.5rem;
+        font-size: 22px;
         font-weight: 700;
-        margin-bottom: 0.5rem;
+        letter-spacing: -0.01em;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
-      .login-right p {
-        color: #999;
-        font-size: 0.875rem;
-        margin-bottom: 2rem;
+      .login-right > p {
+        color: var(--text-muted);
+        font-size: 13px;
+        margin-bottom: 28px;
       }
+
       .form-group {
-        margin-bottom: 1.25rem;
+        margin-bottom: 18px;
       }
       .form-group label {
         display: block;
-        font-size: 0.8rem;
-        color: #999;
-        margin-bottom: 0.5rem;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 8px;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: var(--text-muted);
+        pointer-events: none;
+        transition: color 0.15s;
       }
       .form-group input {
         width: 100%;
-        background: #242424;
-        border: 1px solid #333;
-        color: #e8e8e8;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
+        background: var(--surface3);
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+        padding: 12px 14px 12px 42px;
+        border-radius: var(--r-sm);
+        font-size: 13.5px;
+        font-family: inherit;
         outline: none;
-        transition: border-color 0.2s;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .form-group input::placeholder {
+        color: var(--text-muted);
+      }
+      .form-group input:hover {
+        border-color: var(--border-hover);
       }
       .form-group input:focus {
-        border-color: #e63946;
+        border-color: var(--accent);
+        background: var(--surface2);
       }
+      .form-group input:focus + i,
+      .input-wrap:focus-within i {
+        color: var(--accent);
+      }
+
+      /* kill chrome's red invalid/autofill outline */
+      .form-group input:invalid {
+        box-shadow: none;
+      }
+      .form-group input:-webkit-autofill,
+      .form-group input:-webkit-autofill:hover,
+      .form-group input:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--text-primary);
+        -webkit-box-shadow: 0 0 0px 1000px var(--surface3) inset;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+
       .btn-login {
         width: 100%;
-        background: #e63946;
-        color: white;
+        background: var(--accent);
+        color: #fff;
         border: none;
-        padding: 0.875rem;
-        border-radius: 8px;
-        font-size: 1rem;
+        padding: 13px;
+        border-radius: var(--r-sm);
+        font-size: 13.5px;
         font-weight: 600;
+        letter-spacing: 0.02em;
         cursor: pointer;
-        transition: background 0.2s;
-        margin-top: 0.5rem;
+        transition:
+          background 0.15s,
+          transform 0.1s;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn-login i {
+        font-size: 16px;
       }
       .btn-login:hover {
-        background: #c1121f;
+        background: var(--accent-hover);
+      }
+      .btn-login:active {
+        transform: scale(0.99);
+      }
+
+      .alert {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 14px;
+        border-radius: var(--r-sm);
+        font-size: 12.5px;
+        margin-bottom: 18px;
+        border: 1px solid transparent;
+      }
+      .alert i {
+        font-size: 15px;
+        flex-shrink: 0;
       }
       .alert-error {
-        background: rgba(230, 57, 70, 0.15);
-        border: 1px solid rgba(230, 57, 70, 0.3);
-        color: #ff8a93;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        margin-bottom: 1.25rem;
+        background: var(--red-bg);
+        border-color: var(--red-border);
+        color: #ff9a9d;
       }
       .alert-success {
-        background: rgba(42, 157, 143, 0.15);
-        border: 1px solid rgba(42, 157, 143, 0.3);
-        color: #7ed8d0;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        margin-bottom: 1.25rem;
+        background: var(--green-bg);
+        border-color: var(--green-border);
+        color: #8de8b8;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: var(--text-muted);
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        transition: color 0.2s;
+      }
+
+      .toggle-password:hover {
+        color: var(--accent);
+      }
+
+      @media (max-width: 720px) {
+        .login-wrapper {
+          flex-direction: column;
+          max-width: 420px;
+        }
+        .login-left {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+          padding: 36px 32px;
+        }
+        .login-right {
+          padding: 36px 32px;
+        }
+        .features {
+          display: none;
+        }
       }
     </style>
   </head>
@@ -153,54 +375,105 @@
         </div>
         <div class="features">
           <div class="feature-item">
-            <span>&#x1F4E6;</span
-            ><span>Kelola koleksi action figure &amp; gundam</span>
+            <span class="feature-icon fi-box"><i class="ti ti-box"></i></span>
+            <span>Kelola koleksi action figure &amp; gundam</span>
           </div>
           <div class="feature-item">
-            <span>&#x1F4CA;</span><span>Dashboard statistik koleksi</span>
+            <span class="feature-icon fi-chart"
+              ><i class="ti ti-chart-bar"></i
+            ></span>
+            <span>Dashboard statistik koleksi</span>
           </div>
           <div class="feature-item">
-            <span>&#x1F4B0;</span
-            ><span>Laporan penjualan &amp; keuntungan</span>
+            <span class="feature-icon fi-coin"><i class="ti ti-coin"></i></span>
+            <span>Laporan penjualan &amp; keuntungan</span>
           </div>
           <div class="feature-item">
-            <span>&#x1F3F7;&#xFE0F;</span
-            ><span>Manajemen kategori koleksi</span>
+            <span class="feature-icon fi-tag"><i class="ti ti-tag"></i></span>
+            <span>Manajemen kategori koleksi</span>
           </div>
         </div>
       </div>
+
       <div class="login-right">
-        <h2>Selamat Datang &#x1F44B;</h2>
+        <h2>Selamat Datang</h2>
         <p>Masuk ke akun kamu untuk mulai mengelola koleksi</p>
-        <div class="alert-error" th:if="${param.error}">
+
+        <div class="alert alert-error" th:if="${param.error}">
+          <i class="ti ti-alert-circle"></i>
           Username atau password salah. Coba lagi.
         </div>
-        <div class="alert-success" th:if="${param.logout}">
+        <div class="alert alert-success" th:if="${param.logout}">
+          <i class="ti ti-circle-check"></i>
           Berhasil logout.
         </div>
+
         <form method="post" th:action="@{/login}">
           <div class="form-group">
             <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Masukkan username"
-              required
-              autofocus
-            />
+            <div class="input-wrap">
+              <input
+                type="text"
+                name="username"
+                placeholder="Masukkan username"
+                required
+                autofocus
+              />
+              <i class="ti ti-user"></i>
+            </div>
           </div>
           <div class="form-group">
             <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Masukkan password"
-              required
-            />
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Masukkan password"
+                required
+              />
+              <i class="ti ti-lock"></i>
+
+              <span
+                id="togglePassword"
+                style="
+                  position: absolute;
+                  right: 14px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  cursor: pointer;
+                  color: #888;
+                  font-size: 18px;
+                "
+              >
+                <i class="ti ti-eye"></i>
+              </span>
+            </div>
           </div>
-          <button type="submit" class="btn-login">LOGIN</button>
+          <button type="submit" class="btn-login">
+            <i class="ti ti-login-2"></i> LOGIN
+          </button>
         </form>
       </div>
     </div>
+    </div>
+
+<script>
+const password = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+
+togglePassword.addEventListener("click", function () {
+    if (password.type === "password") {
+        password.type = "text";
+        this.innerHTML = '<i class="ti ti-eye-off"></i>';
+    } else {
+        password.type = "password";
+        this.innerHTML = '<i class="ti ti-eye"></i>';
+    }
+});
+</script>
+
+  </body>
+</html>
   </body>
 </html>

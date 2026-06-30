@@ -17,16 +17,34 @@
         "
       >
         <div>
-          <h1>🏷️ Kategori</h1>
-          <p>Kelola kategori koleksi action figure & gundam</p>
+          <h1><i class="ti ti-tag"></i> Kategori</h1>
+          <p>Kelola kategori koleksi action figure &amp; gundam kamu</p>
         </div>
-        <a th:href="@{/kategori/add}" class="btn btn-primary"
-          >+ Tambah Kategori</a
-        >
+        <a th:href="@{/kategori/add}" class="btn btn-primary">
+          <i class="ti ti-plus"></i> Tambah Kategori
+        </a>
+      </div>
+
+      <!-- Flash messages -->
+      <div th:if="${successMessage}" class="alert alert-success">
+        <i class="ti ti-circle-check"></i>
+        <span th:text="${successMessage}"></span>
+      </div>
+      <div th:if="${errorMessage}" class="alert alert-danger">
+        <i class="ti ti-alert-circle"></i>
+        <span th:text="${errorMessage}"></span>
       </div>
 
       <div class="table-container">
-        <div class="table-header"><h3>Daftar Kategori</h3></div>
+        <div class="table-header">
+          <h3>Daftar Kategori</h3>
+          <span
+            class="text-muted"
+            style="font-size: 0.85rem"
+            th:text="${categories != null ? #lists.size(categories) + ' kategori' : '0 kategori'}"
+            >0 kategori</span
+          >
+        </div>
         <table>
           <thead>
             <tr>
@@ -44,26 +62,28 @@
                   <a
                     th:href="@{'/kategori/edit/' + ${c.idKategori}}"
                     class="btn btn-secondary btn-sm"
-                    >✏️ Edit</a
                   >
+                    <i class="ti ti-edit"></i> Edit
+                  </a>
                   <a
                     th:href="@{'/kategori/delete/' + ${c.idKategori}}"
-                    onclick="return confirm('Hapus kategori ini?');"
+                    onclick="return confirm('Yakin hapus kategori ini?');"
                     class="btn btn-danger btn-sm"
-                    >🗑️ Hapus</a
                   >
+                    <i class="ti ti-trash"></i> Hapus
+                  </a>
                 </div>
               </td>
             </tr>
             <tr th:if="${#lists.isEmpty(categories)}">
-              <td
-                colspan="3"
-                style="text-align: center; color: var(--text2); padding: 3rem"
-              >
-                Belum ada kategori.
-                <a th:href="@{/kategori/add}" style="color: var(--accent)"
-                  >Tambah sekarang →</a
-                >
+              <td colspan="3">
+                <div class="empty-state">
+                  <div class="empty-icon"><i class="ti ti-tag"></i></div>
+                  <div class="empty-title">Belum ada kategori</div>
+                  <a th:href="@{/kategori/add}" class="btn btn-primary mt-2">
+                    <i class="ti ti-plus"></i> Tambah Sekarang
+                  </a>
+                </div>
               </td>
             </tr>
           </tbody>

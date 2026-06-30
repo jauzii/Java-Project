@@ -9,45 +9,76 @@
   <body>
     <main>
       <div class="page-header">
-        <h1>📈 Laporan Penjualan</h1>
+        <h1><i class="ti ti-chart-line"></i> Laporan Penjualan</h1>
         <p>Ringkasan transaksi penjualan koleksi kamu</p>
       </div>
 
+      <!-- STAT CARDS -->
       <div
         class="stat-grid"
-        style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem"
+        style="grid-template-columns: repeat(3, 1fr); margin-bottom: 16px"
       >
         <div class="stat-card green">
-          <div class="stat-icon">✅</div>
-          <div class="stat-label">Total Terjual</div>
+          <div class="stat-label">
+            Total Terjual
+            <span class="stat-icon green"
+              ><i class="ti ti-circle-check"></i
+            ></span>
+          </div>
           <div class="stat-value" th:text="${#lists.size(terjual)}">0</div>
+          <div class="stat-trend">
+            <span th:if="${#lists.size(terjual) > 0}">Transaksi berhasil</span>
+            <span th:if="${#lists.size(terjual) == 0}"
+              >Belum ada transaksi</span
+            >
+          </div>
         </div>
-        <div class="stat-card orange">
-          <div class="stat-icon">💰</div>
-          <div class="stat-label">Total Keuntungan</div>
-          <div class="stat-value" style="font-size: 1.3rem">
+
+        <div class="stat-card amber">
+          <div class="stat-label">
+            Total Keuntungan
+            <span class="stat-icon amber"><i class="ti ti-coin"></i></span>
+          </div>
+          <div class="stat-value" style="font-size: 20px">
             Rp
             <span
               th:text="${#numbers.formatInteger(totalKeuntungan, 0, 'COMMA')}"
               >0</span
             >
           </div>
+          <div class="stat-trend">Akumulasi profit penjualan</div>
         </div>
+
         <div class="stat-card blue">
-          <div class="stat-icon">📊</div>
-          <div class="stat-label">Rata-rata Keuntungan</div>
-          <div class="stat-value" style="font-size: 1.3rem">
+          <div class="stat-label">
+            Rata-rata Keuntungan
+            <span class="stat-icon blue"><i class="ti ti-chart-bar"></i></span>
+          </div>
+          <div class="stat-value" style="font-size: 20px">
             Rp
             <span
               th:text="${#lists.size(terjual) > 0 ? #numbers.formatInteger(totalKeuntungan / #lists.size(terjual), 0, 'COMMA') : 0}"
               >0</span
             >
           </div>
+          <div class="stat-trend">Per transaksi terjual</div>
         </div>
       </div>
 
+      <!-- DETAIL PENJUALAN -->
       <div class="table-container">
-        <div class="table-header"><h3>Detail Penjualan</h3></div>
+        <div class="table-header">
+          <h3>
+            <i class="ti ti-receipt" style="margin-right: 6px"></i> Detail
+            Penjualan
+          </h3>
+          <span
+            class="text-muted"
+            style="font-size: 0.85rem"
+            th:text="${#lists.size(terjual)} + ' transaksi'"
+            >0 transaksi</span
+          >
+        </div>
         <table>
           <thead>
             <tr>
@@ -60,16 +91,18 @@
           </thead>
           <tbody>
             <tr th:each="k, stat : ${terjual}">
-              <td style="color: var(--text2)" th:text="${stat.count}">1</td>
-              <td style="font-weight: 500" th:text="${k.namaBarang}">-</td>
-              <td>
+              <td style="color: var(--text-muted)" th:text="${stat.count}">
+                1
+              </td>
+              <td th:text="${k.namaBarang}">-</td>
+              <td style="font-family: &quot;Courier New&quot;, monospace">
                 Rp
                 <span
                   th:text="${#numbers.formatInteger(k.hargaBeli, 0, 'COMMA')}"
                   >0</span
                 >
               </td>
-              <td>
+              <td style="font-family: &quot;Courier New&quot;, monospace">
                 Rp
                 <span
                   th:text="${#numbers.formatInteger(k.hargaJual, 0, 'COMMA')}"
@@ -77,7 +110,11 @@
                 >
               </td>
               <td>
-                <span style="color: var(--success); font-weight: 600">
+                <span
+                  class="badge badge-green"
+                  style="font-family: &quot;Courier New&quot;, monospace"
+                >
+                  <i class="ti ti-arrow-up" style="font-size: 11px"></i>
                   Rp
                   <span
                     th:text="${#numbers.formatInteger(k.hargaJual - k.hargaBeli, 0, 'COMMA')}"
@@ -87,11 +124,16 @@
               </td>
             </tr>
             <tr th:if="${#lists.isEmpty(terjual)}">
-              <td
-                colspan="5"
-                style="text-align: center; color: var(--text2); padding: 3rem"
-              >
-                Belum ada barang terjual.
+              <td colspan="5">
+                <div class="empty-state">
+                  <div class="empty-icon">
+                    <i class="ti ti-receipt-off"></i>
+                  </div>
+                  <div class="empty-title">Belum ada barang terjual</div>
+                  <div class="empty-sub">
+                    Transaksi penjualan akan muncul di sini
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -99,23 +141,31 @@
             <tr style="background: var(--surface2)">
               <td
                 colspan="4"
-                style="padding: 1rem; font-weight: 600; text-align: right"
-              >
-                Total Keuntungan:
-              </td>
-              <td
                 style="
-                  padding: 1rem;
-                  color: var(--success);
-                  font-weight: 700;
-                  font-size: 1.1rem;
+                  padding: 14px 12px;
+                  font-weight: 600;
+                  text-align: right;
+                  color: var(--text-primary);
+                  font-size: 13px;
                 "
               >
-                Rp
+                Total Keuntungan
+              </td>
+              <td style="padding: 14px 12px">
                 <span
-                  th:text="${#numbers.formatInteger(totalKeuntungan, 0, 'COMMA')}"
-                  >0</span
+                  style="
+                    color: var(--green);
+                    font-weight: 700;
+                    font-size: 15px;
+                    font-family: &quot;Courier New&quot;, monospace;
+                  "
                 >
+                  Rp
+                  <span
+                    th:text="${#numbers.formatInteger(totalKeuntungan, 0, 'COMMA')}"
+                    >0</span
+                  >
+                </span>
               </td>
             </tr>
           </tfoot>

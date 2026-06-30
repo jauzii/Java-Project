@@ -5,6 +5,7 @@ com\example\koleksi\service\impl\KoleksiServiceImpl.class
 com\example\koleksi\controller\DashboardController.class
 com\example\koleksi\model\Koleksi.class
 com\example\koleksi\service\KoleksiService.class
+com\example\koleksi\controller\ProfileController.class
 com\example\koleksi\controller\KoleksiController.class
 com\example\koleksi\repository\KoleksiRepository.class
 com\example\koleksi\config\SecurityConfig.class

@@ -23,26 +23,38 @@ public class SecurityConfig {
     }
 
     @Bean
+    @SuppressWarnings(&quot;deprecation&quot;)
     public DaoAuthenticationProvider authenticationProvider() {
-<span class="fc" id="L27">        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();</span>
-<span class="fc" id="L28">        authProvider.setUserDetailsService(userService);</span>
-<span class="fc" id="L29">        authProvider.setPasswordEncoder(passwordEncoder());</span>
-<span class="fc" id="L30">        return authProvider;</span>
+<span class="fc" id="L28">        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();</span>
+<span class="fc" id="L29">        authProvider.setUserDetailsService(userService);</span>
+<span class="fc" id="L30">        authProvider.setPasswordEncoder(passwordEncoder());</span>
+<span class="fc" id="L31">        return authProvider;</span>
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-<span class="nc" id="L35">        http</span>
-<span class="nc" id="L36">                .authorizeHttpRequests(auth -&gt; auth</span>
-<span class="nc" id="L37">                        .requestMatchers(&quot;/login&quot;, &quot;/db/**&quot;, &quot;/css/**&quot;, &quot;/js/**&quot;, &quot;/&quot;).permitAll()</span>
-<span class="nc" id="L38">                        .anyRequest().authenticated()</span>
+<span class="nc" id="L36">        http</span>
+<span class="nc" id="L37">                .authorizeHttpRequests(auth -&gt; auth</span>
+                        // &quot;/&quot; SENGAJA TIDAK di-permitAll karena route ini
+                        // di-mapping ke DashboardController -&gt; render dashboard.
+                        // Kalau di-permitAll, orang yang belum login bisa langsung
+                        // lihat dashboard tanpa diarahkan ke /login.
+<span class="nc" id="L42">                        .requestMatchers(&quot;/login&quot;, &quot;/css/**&quot;, &quot;/js/**&quot;, &quot;/images/**&quot;).permitAll()</span>
+<span class="nc" id="L43">                        .anyRequest().authenticated()</span>
                 )
-<span class="nc" id="L40">                .authenticationProvider(authenticationProvider())</span>
-<span class="nc" id="L41">                .formLogin(form -&gt; form.loginPage(&quot;/login&quot;).permitAll())</span>
-<span class="nc" id="L42">                .logout(logout -&gt; logout.permitAll())</span>
-<span class="nc" id="L43">                .csrf(csrf -&gt; csrf.disable());</span>
+<span class="nc" id="L45">                .authenticationProvider(authenticationProvider())</span>
+<span class="nc" id="L46">                .formLogin(form -&gt; form</span>
+<span class="nc" id="L47">                        .loginPage(&quot;/login&quot;)</span>
+<span class="nc" id="L48">                        .defaultSuccessUrl(&quot;/dashboard&quot;, true)</span>
+<span class="nc" id="L49">                        .permitAll()</span>
+                )
+<span class="nc" id="L51">                .logout(logout -&gt; logout</span>
+<span class="nc" id="L52">                        .logoutSuccessUrl(&quot;/login?logout&quot;)</span>
+<span class="nc" id="L53">                        .permitAll()</span>
+                )
+<span class="nc" id="L55">                .csrf(csrf -&gt; csrf.disable());</span>
 
-<span class="nc" id="L45">        return http.build();</span>
+<span class="nc" id="L57">        return http.build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
