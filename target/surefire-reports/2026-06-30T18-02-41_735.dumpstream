@@ -1,5 +1,0 @@
-# Created at 2026-06-30T18:02:42.065
-Boot Manifest-JAR contains absolute paths in classpath 'D:\UAS-Algoritma\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-
