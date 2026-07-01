@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -19,10 +18,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (!userRepository.findByUsername("admin").isPresent()) {
+        if (!userRepository.findByUsername("Jauzii").isPresent()) {
             User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("adminpass"));
+            admin.setUsername("Jauzii");
+            admin.setPassword(passwordEncoder.encode("forecasting"));
             userRepository.save(admin);
         }
     }
