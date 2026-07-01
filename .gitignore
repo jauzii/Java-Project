@@ -1,0 +1,7 @@
+target/
+*.class
+.vscode/settings.json
+.idea/
+*.iml
+.DS_Store
+Thumbs.db

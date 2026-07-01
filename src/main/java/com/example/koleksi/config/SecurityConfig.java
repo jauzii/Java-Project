@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 @Configuration
 public class SecurityConfig {
@@ -35,11 +36,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // "/" SENGAJA TIDAK di-permitAll karena route ini
-                        // di-mapping ke DashboardController -> render dashboard.
-                        // Kalau di-permitAll, orang yang belum login bisa langsung
-                        // lihat dashboard tanpa diarahkan ke /login.
-                        .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll()
+                        // Dashboard & root BISA diakses guest (tanpa login).
+                        // DashboardController sendiri yang nanti membedakan
+                        // apakah user login atau tidak, lalu menampilkan
+                        // data asli atau data kosong/dummy.
+                        .requestMatchers("/", "/dashboard", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+                        // Semua route lain (koleksi, kategori, laporan, profile) WAJIB login
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -51,6 +53,15 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
+                )
+                // KUNCI UTAMA: kalau guest coba akses halaman yang butuh login,
+                // JANGAN lempar ke /login. Lempar balik ke /dashboard dengan
+                // parameter ?needLogin supaya dashboard bisa nampilin alert
+                // peringatan, bukan langsung paksa login.
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(
+                                new LoginUrlAuthenticationEntryPoint("/dashboard?needLogin")
+                        )
                 )
                 .csrf(csrf -> csrf.disable());
 

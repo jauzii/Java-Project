@@ -1,6 +1,5 @@
 package com.example.koleksi.controller;
 
-import com.example.koleksi.model.Koleksi;
 import com.example.koleksi.service.KoleksiService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,11 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.ConcurrentModel;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DashboardControllerTest {
@@ -21,24 +16,32 @@ class DashboardControllerTest {
     KoleksiService koleksiService;
 
     @Test
-    void dashboardPopulatesModel() {
+    void dashboard_guestPath_returnsEmptyData() {
+        // Di luar Spring context, SecurityContextHolder = null
+        // -> isUserLoggedIn() = false -> semua data dikosongkan
         DashboardController ctrl = new DashboardController(koleksiService);
-
-        when(koleksiService.totalValue()).thenReturn(100);
-        when(koleksiService.countByStatus("Dijual")).thenReturn(1L);
-        when(koleksiService.countByStatus("Terjual")).thenReturn(2L);
-        when(koleksiService.findAll()).thenReturn(List.of(new Koleksi()));
-        Koleksi expensive = new Koleksi();
-        when(koleksiService.findMostExpensive()).thenReturn(Optional.of(expensive));
-
         ConcurrentModel model = new ConcurrentModel();
-        String view = ctrl.dashboard(model);
+
+        String view = ctrl.dashboard(model, null);
 
         assertEquals("dashboard", view);
-        assertEquals(100, model.getAttribute("totalValue"));
-        assertEquals(1L, model.getAttribute("countDijual"));
-        assertEquals(2L, model.getAttribute("countTerjual"));
-        assertEquals(1L, model.getAttribute("totalKoleksi"));
-        assertSame(expensive, model.getAttribute("mostExpensive"));
+        assertEquals(false, model.getAttribute("isLoggedIn"));
+        assertEquals(0, model.getAttribute("totalValue"));
+        assertEquals(0L, model.getAttribute("countDijual"));
+        assertEquals(0L, model.getAttribute("countTerjual"));
+        assertEquals(0L, model.getAttribute("totalKoleksi"));
+        assertNull(model.getAttribute("mostExpensive"));
+        assertNull(model.getAttribute("needLoginWarning"));
+    }
+
+    @Test
+    void dashboard_needLoginParam_setsWarningFlag() {
+        DashboardController ctrl = new DashboardController(koleksiService);
+        ConcurrentModel model = new ConcurrentModel();
+
+        // Simulasi redirect dari SecurityConfig saat guest akses halaman terlarang
+        ctrl.dashboard(model, "");
+
+        assertEquals(true, model.getAttribute("needLoginWarning"));
     }
 }
